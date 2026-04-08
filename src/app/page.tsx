@@ -287,23 +287,23 @@ export default function LandingPage() {
             <div className="h-3 w-3 rounded-full bg-green-500" />
             <span className="ml-2 text-xs text-muted-foreground">Expense Vault Dashboard</span>
           </div>
-          <div className="grid grid-cols-3 gap-4 p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 p-4 sm:p-6">
             <div className="rounded-lg bg-emerald-500/10 p-4">
               <p className="text-sm text-muted-foreground">Total Income</p>
-              <p className="text-2xl font-bold text-emerald-600">$12,450</p>
+              <p className="text-xl sm:text-2xl font-bold text-emerald-600">₹86,500</p>
               <p className="text-xs text-emerald-600">+12% from last month</p>
             </div>
             <div className="rounded-lg bg-red-500/10 p-4">
               <p className="text-sm text-muted-foreground">Total Expenses</p>
-              <p className="text-2xl font-bold text-red-600">$8,320</p>
+              <p className="text-xl sm:text-2xl font-bold text-red-600">₹42,300</p>
               <p className="text-xs text-red-600">-5% from last month</p>
             </div>
             <div className="rounded-lg bg-blue-500/10 p-4">
               <p className="text-sm text-muted-foreground">Net Savings</p>
-              <p className="text-2xl font-bold text-blue-600">$4,130</p>
+              <p className="text-xl sm:text-2xl font-bold text-blue-600">₹44,200</p>
               <p className="text-xs text-blue-600">+28% from last month</p>
             </div>
-            <div className="col-span-2 flex h-32 items-end gap-1 rounded-lg border p-4">
+            <div className="sm:col-span-2 flex h-32 items-end gap-1 rounded-lg border p-4">
               {[40, 65, 45, 80, 55, 70, 90, 60, 75, 85, 50, 95].map((h, i) => (
                 <div
                   key={i}

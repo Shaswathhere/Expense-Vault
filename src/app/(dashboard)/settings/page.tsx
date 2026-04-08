@@ -261,7 +261,7 @@ export default function SettingsPage() {
           <CardTitle>Profile</CardTitle>
           <CardDescription>Your account information</CardDescription>
         </CardHeader>
-        <CardContent className="flex items-center gap-4">
+        <CardContent className="flex flex-col sm:flex-row items-center gap-4">
           <Avatar className="h-16 w-16">
             <AvatarImage src={user?.image || undefined} />
             <AvatarFallback className="bg-primary text-primary-foreground text-lg">

@@ -120,7 +120,7 @@ export function TransactionForm({ open, onClose, editId }: Props) {
           }}
           className="space-y-4"
         >
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Button
               type="button"
               variant={type === "EXPENSE" ? "default" : "outline"}
@@ -165,7 +165,7 @@ export function TransactionForm({ open, onClose, editId }: Props) {
             </Select>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-2">
               <Label>Amount ({getCurrencySymbol(currency)})</Label>
               <Input

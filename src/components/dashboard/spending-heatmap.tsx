@@ -51,9 +51,9 @@ export function SpendingHeatmap({ data }: SpendingHeatmapProps) {
         <CardTitle>Spending Activity (90 days)</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex gap-[3px] overflow-x-auto pb-2">
+        <div className="flex gap-[2px] sm:gap-[3px] overflow-x-auto pb-2">
           {weeks.map((week, wi) => (
-            <div key={wi} className="flex flex-col gap-[3px]">
+            <div key={wi} className="flex flex-col gap-[2px] sm:gap-[3px]">
               {week.map((day) => (
                 <Tooltip key={day.date}>
                   <TooltipTrigger

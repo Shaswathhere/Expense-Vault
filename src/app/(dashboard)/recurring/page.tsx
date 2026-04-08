@@ -114,7 +114,7 @@ export default function RecurringPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold">Recurring Transactions</h1>
           <p className="text-sm text-muted-foreground">
@@ -190,7 +190,7 @@ export default function RecurringPage() {
             }}
             className="space-y-4"
           >
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Button
                 type="button"
                 variant={type === "EXPENSE" ? "default" : "outline"}
@@ -212,7 +212,7 @@ export default function RecurringPage() {
               <Label>Title</Label>
               <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g., Netflix" required />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-2">
                 <Label>Amount ({symbol})</Label>
                 <Input type="number" step="0.01" min="0.01" value={amount} onChange={(e) => setAmount(e.target.value)} required />

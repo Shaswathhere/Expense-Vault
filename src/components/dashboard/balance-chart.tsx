@@ -22,7 +22,7 @@ export function BalanceChart({ data }: BalanceChartProps) {
         <CardTitle>Balance Over Time</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[250px]">
+        <div className="h-[200px] sm:h-[250px]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data}>
               <defs>

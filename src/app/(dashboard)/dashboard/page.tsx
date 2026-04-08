@@ -59,19 +59,19 @@ export default function DashboardPage() {
         monthlyData={data.monthlyData}
       />
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <SpendingChart data={data.monthlyData} />
         </div>
         <CategoryBreakdown data={data.categoryData} />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
         <BalanceChart data={data.balanceOverTime} />
         <SpendingHeatmap data={data.dailySpending} />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <RecentTransactions transactions={data.recentTransactions} />
         </div>

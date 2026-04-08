@@ -27,14 +27,14 @@ export function TransactionFilters({
 
   return (
     <Card>
-      <CardContent className="flex flex-wrap items-center gap-3 pt-4">
+      <CardContent className="flex flex-wrap items-center gap-2 sm:gap-3 pt-4">
         <Select
           value={filters.type || "all"}
           onValueChange={(v) =>
             v && onChange({ ...filters, type: v === "all" ? undefined : v, page: 1 })
           }
         >
-          <SelectTrigger className="w-[140px]">
+          <SelectTrigger className="w-full sm:w-[140px]">
             <SelectValue placeholder="Type" />
           </SelectTrigger>
           <SelectContent>
@@ -50,7 +50,7 @@ export function TransactionFilters({
             v && onChange({ ...filters, category: v === "all" ? undefined : v, page: 1 })
           }
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px]">
             <SelectValue placeholder="Category" />
           </SelectTrigger>
           <SelectContent>
@@ -70,7 +70,7 @@ export function TransactionFilters({
           onChange={(e) =>
             onChange({ ...filters, from: e.target.value || undefined, page: 1 })
           }
-          className="w-[160px]"
+          className="w-full sm:w-[160px]"
         />
         <Input
           type="date"
@@ -79,7 +79,7 @@ export function TransactionFilters({
           onChange={(e) =>
             onChange({ ...filters, to: e.target.value || undefined, page: 1 })
           }
-          className="w-[160px]"
+          className="w-full sm:w-[160px]"
         />
 
         {hasFilters && (

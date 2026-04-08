@@ -23,7 +23,7 @@ export function SpendingChart({ data }: SpendingChartProps) {
         <CardTitle>Income vs Expenses</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[300px]">
+        <div className="h-[220px] sm:h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
