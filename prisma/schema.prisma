@@ -1,0 +1,208 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Auth Models (NextAuth) ────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String?
+  image         String?
+  emailVerified DateTime?
+  currency      String    @default("INR")
+
+  accounts             Account[]
+  sessions             Session[]
+  transactions         Transaction[]
+  budgets              Budget[]
+  recurringTransactions RecurringTransaction[]
+  reminders            Reminder[]
+  splitGroupMembers    SplitGroupMember[]
+  notifications        Notification[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── App Models ────────────────────────────────────────────────
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+model Transaction {
+  id          String          @id @default(cuid())
+  title       String
+  amount      Decimal         @db.Decimal(12, 2)
+  type        TransactionType
+  category    String
+  description String?
+  date        DateTime
+  receiptUrl  String?
+  currency    String          @default("INR")
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  splitGroupId String?
+  splitGroup   SplitGroup? @relation(fields: [splitGroupId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([date])
+  @@index([category])
+}
+
+enum BudgetPeriod {
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+model Budget {
+  id       String       @id @default(cuid())
+  category String
+  amount   Decimal      @db.Decimal(12, 2)
+  period   BudgetPeriod @default(MONTHLY)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, category, period])
+  @@index([userId])
+}
+
+enum Frequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+model RecurringTransaction {
+  id        String          @id @default(cuid())
+  title     String
+  amount    Decimal         @db.Decimal(12, 2)
+  type      TransactionType
+  category  String
+  frequency Frequency       @default(MONTHLY)
+  nextDue   DateTime
+  isActive  Boolean         @default(true)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([nextDue])
+}
+
+model Reminder {
+  id     String   @id @default(cuid())
+  title  String
+  amount Decimal? @db.Decimal(12, 2)
+  date   DateTime
+  isDone Boolean  @default(false)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([date])
+}
+
+model SplitGroup {
+  id          String   @id @default(cuid())
+  name        String
+  totalAmount Decimal  @db.Decimal(12, 2)
+  creatorId   String    @default("")
+
+  transactions Transaction[]
+  members      SplitGroupMember[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SplitGroupMember {
+  id     String  @id @default(cuid())
+  share  Decimal @db.Decimal(12, 2)
+  isPaid Boolean @default(false)
+
+  splitGroupId String
+  splitGroup   SplitGroup @relation(fields: [splitGroupId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([splitGroupId, userId])
+}
+
+model Notification {
+  id      String  @id @default(cuid())
+  type    String  // "split_invite", "split_paid", etc.
+  title   String
+  message String
+  isRead  Boolean @default(false)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+}
