@@ -20,6 +20,9 @@ import {
   PiggyBank,
   Repeat,
   Sparkles,
+  ShieldCheck,
+  Wrench,
+  AlertCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useUserCurrency } from "@/hooks/use-user-currency";
@@ -31,10 +34,14 @@ interface ParsedResult {
   amount: number;
   category: string;
   date: string;
-  frequency?: string;
-  period?: string;
+  frequency?: string | null;
+  period?: string | null;
   confidence: number;
   original: string;
+  source?: "AI_PROPOSED" | "FALLBACK_EXTRACTED";
+  engine?: string;
+  warning?: string;
+  requiresConfirmation?: boolean;
 }
 
 const actionConfig = {
@@ -132,7 +139,7 @@ export function QuickAdd() {
             type: result.type || "EXPENSE",
             category: result.category,
             date: result.date,
-            description: `Added via Quick Add: "${result.original}"`,
+            description: `Added via Quick Add (${result.source === "FALLBACK_EXTRACTED" ? "Rule-based Fallback" : "AI"}): "${result.original}"`,
           };
           break;
 
@@ -317,7 +324,7 @@ export function QuickAdd() {
                   {loading && (
                     <div className="mt-4 flex items-center justify-center gap-2 py-4 text-sm text-muted-foreground">
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      Understanding your input...
+                      Parsing input...
                     </div>
                   )}
 
@@ -331,6 +338,38 @@ export function QuickAdd() {
                       <Separator className="mb-3" />
 
                       <div className="rounded-lg border bg-muted/30 p-3 space-y-2.5">
+                        {/* Staging & Provenance header */}
+                        <div className="flex items-center justify-between pb-1 border-b border-border/40">
+                          <div className="flex items-center gap-1.5">
+                            {result.source === "FALLBACK_EXTRACTED" ? (
+                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-amber-500/40 text-amber-600 dark:text-amber-400 gap-1">
+                                <Wrench className="h-3 w-3" />
+                                Fallback Draft
+                              </Badge>
+                            ) : (
+                              <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-blue-500/40 text-blue-600 dark:text-blue-400 gap-1">
+                                <Sparkles className="h-3 w-3" />
+                                AI Draft
+                              </Badge>
+                            )}
+                            <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                              <ShieldCheck className="h-3 w-3 text-emerald-600" />
+                              Not saved yet
+                            </span>
+                          </div>
+                          <span className="text-[10px] font-medium text-muted-foreground">
+                            {Math.round(result.confidence * 100)}% confidence
+                          </span>
+                        </div>
+
+                        {/* Optional warning banner */}
+                        {result.warning && (
+                          <div className="flex items-start gap-1.5 rounded-md bg-amber-500/10 border border-amber-500/20 p-2 text-[11px] text-amber-700 dark:text-amber-400">
+                            <AlertCircle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+                            <span>{result.warning}</span>
+                          </div>
+                        )}
+
                         {/* Action badge */}
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
@@ -359,9 +398,6 @@ export function QuickAdd() {
                               </Badge>
                             )}
                           </div>
-                          <span className="text-[10px] text-muted-foreground">
-                            {Math.round(result.confidence * 100)}% confident
-                          </span>
                         </div>
 
                         {/* Details */}
@@ -403,7 +439,7 @@ export function QuickAdd() {
                             ) : (
                               <Check className="mr-1.5 h-3 w-3" />
                             )}
-                            Confirm
+                            Confirm & Save
                           </Button>
                           <Button
                             size="sm"
@@ -411,7 +447,7 @@ export function QuickAdd() {
                             onClick={() => { setResult(null); inputRef.current?.focus(); }}
                           >
                             <Pencil className="mr-1.5 h-3 w-3" />
-                            Edit
+                            Discard
                           </Button>
                         </div>
                       </div>
